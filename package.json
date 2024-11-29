@@ -1,0 +1,17 @@
+{
+    "name": "vitalcore",
+    "version": "1.0.0",
+    "description": "Core Features for the App Data Modeling",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node index.js --watch"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "mysql2": "^3.11.4",
+        "sequelize": "^6.37.5"
+    }
+}
