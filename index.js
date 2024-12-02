@@ -3,12 +3,51 @@ const Cell = require('./models/cell');
 const Gene = require('./models/gene');
 const LifeFactor = require('./models/lifeFactor');
 const mysql = require("mysql2");
-const cors = require("cors");
+
 // Import required modules
 const express = require('express');
+const app = express();
 const path = require('path');
 const { graphqlHTTP } = require("express-graphql");
 const { buildSchema } = require("graphql");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const cors = require("cors");
+const corsOptions = {
+    origin: "http://localhost:3000", // Allow only this origin
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], // Allowed methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+
+    optionsSuccessStatus: 204, // Status for preflight requests
+};
+
+app.use(cors(corsOptions));
+
+
+const { join } = require('node:path');
+const http = require('http');
+const server = createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:3000"
+    }
+});
+io.on('connection', (socket) => {
+    console.log('User connected');
+    socket.on('lifespanUpdated', (data) => {
+        console.log('Received lifespan data:', data);
+        socket.broadcast.emit('lifespanUpdated', data);
+    });
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
+server.listen(8080);
+
+
+
+
+
 // Initialize the app
 // Step 3: Define the GraphQL schema
 const schema = buildSchema(`
@@ -69,32 +108,52 @@ const root = {
     getLifeFactors: async() => {
         return await LifeFactor.findAll(); // Fetch all life factors
     },
-    addGene: async({ gene_name, mutation_rate, impact_on_lifespan }) => {
-        return await Gene.create({ gene_name, mutation_rate, impact_on_lifespan }); // Create a new gene
+    addGene: async({ gene_name, mutation_rate, impact_on_lifespan }, context) => {
+        const { socket } = context; // Extract socket from context
+        if (!socket) {
+            throw new Error("Socket instance is missing");
+        }
+
+        const gene = await Gene.create({ gene_name, mutation_rate, impact_on_lifespan }); // Create a new gene
+        socket.emit('geneAdded', gene);
+        return gene
     },
-    modifyGeneActivity: async({ id, impact_on_lifespan }) => {
+    modifyGeneActivity: async({ id, impact_on_lifespan }, context) => {
         const gene = await Gene.findByPk(id); // Find the gene by ID
         if (!gene) throw new Error("Gene not found");
         gene.impact_on_lifespan = impact_on_lifespan; // Update the gene's impact on lifespan
+        const { socket } = context; // Extract socket from context
+        if (!socket) {
+            throw new Error("Socket instance is missing");
+        }
+        socket.emit('geneModified', gene);
         await gene.save(); // Save changes
         return gene;
     },
 };
 
-const app = express();
-
-app.use(cors({
-    origin: "http://localhost:3000",
-}));
-
 app.use(
     "/graphql",
-    graphqlHTTP({
+    graphqlHTTP((req, res) => ({
         schema: schema,
         rootValue: root,
-        graphiql: true, // Enables the GraphiQL UI
-    })
+        graphiql: true,
+        context: { socket: io }, // Pass the socket instance here
+    }))
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const PORT = process.env.PORT || 3000;
 // Sync models and check connection
@@ -212,7 +271,8 @@ app.put("/cells", async(req, res) => {
                 }
             );
         }
-
+        // Emit an event to clients after updating data
+        io.emit('lifespanUpdated', lifespan); // This sends data to all connected clients
         res.status(200).json({ message: "Lifespan data updated successfully" });
     } catch (error) {
         console.error("Error updating lifespan:", error);
@@ -228,6 +288,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
     res.status(404).send('404 - Page Not Found');
 });
+
 
 
 
