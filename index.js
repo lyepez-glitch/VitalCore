@@ -1,9 +1,9 @@
+require('dotenv').config();
 const sequelize = require('./models/db');
 const Cell = require('./models/cell');
 const Gene = require('./models/gene');
 const LifeFactor = require('./models/lifeFactor');
 const mysql = require("mysql2");
-
 // Import required modules
 const express = require('express');
 const app = express();
