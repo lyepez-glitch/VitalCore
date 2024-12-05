@@ -14,7 +14,7 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const corsOptions = {
-    origin: "http://localhost:3000", // Allow only this origin
+    origin: "https://vitalcore-i8zco4tn7-lucas-projects-f61d5cb5.vercel.app/", // Allow only this origin
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], // Allowed methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
 
@@ -29,7 +29,7 @@ const http = require('http');
 const server = createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000"
+        origin: "https://vitalcore-i8zco4tn7-lucas-projects-f61d5cb5.vercel.app/"
     }
 });
 io.on('connection', (socket) => {
