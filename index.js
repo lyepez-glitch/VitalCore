@@ -155,7 +155,8 @@ app.use(
 
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
+
 // Sync models and check connection
 async function initializeApp() {
     try {
