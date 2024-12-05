@@ -42,7 +42,7 @@ io.on('connection', (socket) => {
         console.log('User disconnected');
     });
 });
-server.listen(8080);
+// server.listen(8080);
 
 
 
@@ -155,7 +155,7 @@ app.use(
 
 
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 
 // Sync models and check connection
 async function initializeApp() {
@@ -294,6 +294,6 @@ app.use((req, res, next) => {
 
 
 // Start the server
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
