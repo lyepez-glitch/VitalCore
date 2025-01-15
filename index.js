@@ -173,6 +173,14 @@ async function initializeApp() {
             lifespan: 100,
         });
 
+        await Cell.create({
+            cell_type: 'test',
+            age: 7,
+            repair_rate: 0.100,
+            mutation_rate: 0.02,
+            lifespan: 200,
+        });
+
         await Gene.create({
             gene_name: 'GeneA',
             mutation_rate: 0.1,
