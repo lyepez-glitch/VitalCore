@@ -14,7 +14,8 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const corsOptions = {
-    origin: "https://vitalcore-elhh0nqth-lucas-projects-f61d5cb5.vercel.app", // Allow only this origin
+
+    origin: "https://vitalsource-frontend-k03zxevtb-lucas-projects-f61d5cb5.vercel.app", // Allow only this origin
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], // Allowed methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
 
