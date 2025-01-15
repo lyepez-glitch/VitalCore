@@ -1,11 +1,11 @@
 require('dotenv').config();
-const { ENDPOINT, PORT, USERNAME, PASSWORD } = process.env;
+const { ENDPOINT, PORT, USERNAME, PASSWORD, HOST } = process.env;
 console.log('process env ' + ENDPOINT + ' ' + ' ' + PORT + ' ' + USERNAME + ' ' + PASSWORD)
 const { Sequelize } = require('sequelize');
 
 // Create a Sequelize instance and connect to the database
 const sequelize = new Sequelize('vitalsource', USERNAME, PASSWORD, {
-    host: ENDPOINT, // Your RDS endpoint
+    host: HOST, // Your RDS endpoint
     dialect: 'mysql', // Specify MySQL dialect
     port: PORT, // MySQL port
     logging: false, // Optional: Disable logging for cleaner output
