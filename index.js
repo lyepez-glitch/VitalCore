@@ -13,7 +13,7 @@ const { buildSchema } = require("graphql");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
-const User = require('./models/user');
+const User = require('./models/User');
 
 const corsOptions = {
 
