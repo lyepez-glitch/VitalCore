@@ -251,6 +251,7 @@ app.post('/login', async(req, res) => {
         });
         res.json({ token });
     } catch (error) {
+        console.log('error', error);
         res.status(500).json({ error: 'Failed to log in' });
     }
 });
