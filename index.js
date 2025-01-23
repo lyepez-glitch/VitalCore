@@ -35,7 +35,9 @@ const http = require('http');
 const server = createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: ["https://vitalsource-frontend-k03zxevtb-lucas-projects-f61d5cb5.vercel.app", "https://vitalsource-frontend-a2qq06694-lucas-projects-f61d5cb5.vercel.app"]
+        origin: ["https://vitalsource-frontend-k03zxevtb-lucas-projects-f61d5cb5.vercel.app", "https://vitalsource-frontend-a2qq06694-lucas-projects-f61d5cb5.vercel.app",
+            "vitalsource-frontend.vercel.app"
+        ]
     }
 });
 io.on('connection', (socket) => {
