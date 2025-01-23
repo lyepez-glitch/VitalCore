@@ -241,6 +241,7 @@ app.post('/signup', async(req, res) => {
 
 app.post('/login', async(req, res) => {
     const { email, password } = req.body;
+    console.log('JWT_SECRET:', process.env.JWT_SECRET);
     try {
         const user = await User.findOne({ where: { email } });
         if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -250,6 +251,7 @@ app.post('/login', async(req, res) => {
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
             expiresIn: '1h',
         });
+
         res.json({ token });
     } catch (error) {
         console.log('error', error);
