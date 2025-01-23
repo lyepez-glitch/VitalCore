@@ -13,6 +13,8 @@ const { buildSchema } = require("graphql");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
+const User = require('./models/user');
+
 const corsOptions = {
 
     origin: "https://vitalsource-frontend-k03zxevtb-lucas-projects-f61d5cb5.vercel.app", // Allow only this origin
@@ -209,6 +211,33 @@ app.use(express.urlencoded({ extended: true }));
 // Set up a basic route
 app.get('/', (req, res) => {
     res.send('Welcome to your Express app!');
+});
+app.post('/signup', async(req, res) => {
+    const { email, password } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await User.create({ email, password: hashedPassword });
+        res.status(201).json({ message: 'User created successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to sign up' });
+    }
+});
+
+app.post('/login', async(req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await User.findOne({ where: { email } });
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.status(401).json({ error: 'Invalid email or password' });
+        }
+
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+            expiresIn: '1h',
+        });
+        res.json({ token });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to log in' });
+    }
 });
 // Define an API route to fetch cells
 // Define an API route to fetch cells
