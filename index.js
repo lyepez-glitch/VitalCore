@@ -18,7 +18,7 @@ const User = require('./models/User');
 const corsOptions = {
 
     origin: ["https://vitalsource-frontend-k03zxevtb-lucas-projects-f61d5cb5.vercel.app",
-        "https://vitalsource-frontend-a2qq06694-lucas-projects-f61d5cb5.vercel.app/"
+        "https://vitalsource-frontend-a2qq06694-lucas-projects-f61d5cb5.vercel.app"
     ],
     // Allow only this origin
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], // Allowed methods
