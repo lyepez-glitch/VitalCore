@@ -26,7 +26,8 @@ const corsOptions = {
         "https://vital-source-front-end-dozi.vercel.app",
         "https://vital-source-front-end-lb8m.vercel.app",
         "https://vital-source-front-end.vercel.app",
-        "https://vital-source-front-end-p1eg.vercel.app"
+        "https://vital-source-front-end-p1eg.vercel.app",
+        "https://vital-source-front-end-jp5k.vercel.app"
     ],
     // Allow only this origin
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], // Allowed methods
@@ -50,7 +51,8 @@ const io = new Server(server, {
             "https://vital-source-front-end-dozi.vercel.app",
             "https://vital-source-front-end-lb8m.vercel.app",
             "https://vital-source-front-end.vercel.app",
-            "https://vital-source-front-end-p1eg.vercel.app"
+            "https://vital-source-front-end-p1eg.vercel.app",
+            "https://vital-source-front-end-jp5k.vercel.app"
         ]
     }
 });
