@@ -20,14 +20,7 @@ const jwt = require('jsonwebtoken');
 const corsOptions = {
 
     origin: [
-        "https://vitalsource-frontend-k03zxevtb-lucas-projects-f61d5cb5.vercel.app",
-        "https://vitalsource-frontend-a2qq06694-lucas-projects-f61d5cb5.vercel.app",
-        "https://vitalsource-frontend.vercel.app",
-        "https://vital-source-front-end-dozi.vercel.app",
-        "https://vital-source-front-end-lb8m.vercel.app",
-        "https://vital-source-front-end.vercel.app",
-        "https://vital-source-front-end-p1eg.vercel.app",
-        "https://vital-source-front-end-jp5k.vercel.app"
+        process.env.FRONTEND_URL
     ],
     // Allow only this origin
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], // Allowed methods
@@ -45,28 +38,20 @@ const server = createServer(app);
 const io = new Server(server, {
     cors: {
         origin: [
-            "https://vitalsource-frontend-k03zxevtb-lucas-projects-f61d5cb5.vercel.app",
-            "https://vitalsource-frontend-a2qq06694-lucas-projects-f61d5cb5.vercel.app",
-            "https://vitalsource-frontend.vercel.app",
-            "https://vital-source-front-end-dozi.vercel.app",
-            "https://vital-source-front-end-lb8m.vercel.app",
-            "https://vital-source-front-end.vercel.app",
-            "https://vital-source-front-end-p1eg.vercel.app",
-            "https://vital-source-front-end-jp5k.vercel.app"
+            process.env.FRONTEND_URL
         ]
     }
 });
 io.on('connection', (socket) => {
     console.log('User connected');
     socket.on('lifespanUpdated', (data) => {
-        console.log('Received lifespan data:', data);
         socket.broadcast.emit('lifespanUpdated', data);
     });
     socket.on('disconnect', () => {
         console.log('User disconnected');
     });
 });
-// server.listen(8080);
+
 
 
 
@@ -112,13 +97,7 @@ const schema = buildSchema(`
 `);
 
 
-// // Step 4: Create an in-memory database (just for simplicity)
-// let genes = [
-//     { id: "1", name: "Gene A", impact_on_lifespan: 0.1 },
-//     { id: "2", name: "Gene B", impact_on_lifespan: 0.2 },
-// ];
 
-// Step 5: Define resolvers
 const root = {
     getGenes: async() => {
         return await Gene.findAll(); // Fetch all genes from the database
@@ -218,7 +197,7 @@ async function initializeApp() {
 
         console.log('Test records created.');
     } catch (error) {
-        console.error('Error initializing the app:', error);
+        console.error('Error initializing the app:');
     }
 }
 
@@ -240,14 +219,14 @@ app.post('/signup', async(req, res) => {
         const user = await User.create({ email, password: hashedPassword });
         res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
-        console.log("error", error);
+        console.log("error");
         res.status(500).json({ error: 'Failed to sign up' });
     }
 });
 
 app.post('/login', async(req, res) => {
     const { email, password } = req.body;
-    console.log('JWT_SECRET:', process.env.JWT_SECRET);
+
     try {
         const user = await User.findOne({ where: { email } });
         if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -260,7 +239,7 @@ app.post('/login', async(req, res) => {
 
         res.json({ token });
     } catch (error) {
-        console.log('error', error);
+
         res.status(500).json({ error: 'Failed to log in' });
     }
 });
@@ -277,7 +256,7 @@ app.get("/cells", async(req, res) => {
         // Send the data as a JSON response
         res.json({ lifespan: lifespanData });
     } catch (err) {
-        console.error("Error fetching data:", err);
+        console.error("Error fetching data:");
         res.status(500).json({ error: "Failed to fetch data" });
     }
 });
@@ -293,7 +272,7 @@ app.get("/cellss", async(req, res) => {
         // Send the data as a JSON response
         res.json({ cells: results });
     } catch (err) {
-        console.error("Error fetching data:", err);
+        console.error("Error fetching data:");
         res.status(500).json({ error: "Failed to fetch data" });
     }
 });
@@ -309,7 +288,7 @@ app.get("/genes", async(req, res) => {
         // Send the data as a JSON response
         res.json({ genes: results });
     } catch (err) {
-        console.error("Error fetching data:", err);
+        console.error("Error fetching data:");
         res.status(500).json({ error: "Failed to fetch data" });
     }
 });
@@ -339,7 +318,7 @@ app.put("/cells", async(req, res) => {
         io.emit('lifespanUpdated', lifespan); // This sends data to all connected clients
         res.status(200).json({ message: "Lifespan data updated successfully" });
     } catch (error) {
-        console.error("Error updating lifespan:", error);
+        console.error("Error updating lifespan:");
         res.status(500).json({ error: "Failed to update lifespan data" });
     }
 });
