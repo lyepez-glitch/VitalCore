@@ -16,7 +16,7 @@ const cors = require("cors");
 const bcrypt = require('bcryptjs');
 const User = require('./models/User');
 const jwt = require('jsonwebtoken');
-
+console.log(process.env.FRONTEND_URL);
 const corsOptions = {
 
     origin: [
