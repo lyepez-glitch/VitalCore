@@ -29,7 +29,7 @@ Backend service powering the VitalSource simulation platform, enabling users to 
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/your-username/vitalsource-backend.git
+git clone https://github.com/lyepez-glitch/vitalsource-backend.git
 cd vitalsource-backend
 2. Install dependencies
 
